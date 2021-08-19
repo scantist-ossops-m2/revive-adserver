@@ -3366,6 +3366,7 @@ $aMagicMacros[$key] = urlencode($value);
 }
 }
 }
+_adRenderAddPluginMagicMacros($aMagicMacros, $aBanner, $code);
 $aBanner['aMagicMacros'] = $aMagicMacros;
 preg_match_all('#{clickurl(|_enc|_html)}((https?(?::|%3[aA]))?(//|%2[fF]%2[fF])[^ ]+?)(?=[\'" ])#', $code, $aMatches);
 for ($i = 0; $i < count($aMatches[2]); $i++) {
@@ -3722,6 +3723,21 @@ break;
 }
 }
 return $functionName;
+}
+function _adRenderAddPluginMagicMacros(array &$aMagicMacros, array $aBanner, string $code): void
+{
+$pluginMagicMacros = OX_Delivery_Common_hook('addMagicMacros', [$aBanner, $code]);
+if (!is_array($pluginMagicMacros)) {
+return;
+}
+foreach ($pluginMagicMacros as $pluginMagicMacro) {
+if (!is_array($pluginMagicMacro)) {
+continue;
+}
+foreach ($pluginMagicMacro as $key => $value) {
+$aMagicMacros[$key] = $value;
+}
+}
 }
 
 
